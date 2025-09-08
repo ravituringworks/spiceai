@@ -45,6 +45,7 @@ use datafusion::sql::{TableReference, sqlparser::ast::Expr};
 use futures::StreamExt;
 use itertools::Itertools;
 use llms::embeddings::Embed;
+#[cfg(feature = "s3_vectors")]
 use runtime_datafusion_index::IndexedTableProvider;
 use search::{
     aggregation::{AggregationResult, reciprocal_rank::ReciprocalRankFusion},
@@ -82,6 +83,7 @@ impl VectorSearch {
     }
 
     /// Checks if a  [`TableProvider`] has an associated vector index, and if so, returns the associated [`Embed`].
+    #[allow(clippy::unused_async)] // async is not used when the feature is disabled
     async fn model_from_vector_index(
         &self,
         tbl: &Arc<dyn TableProvider>,
